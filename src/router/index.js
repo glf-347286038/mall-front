@@ -7,7 +7,7 @@ export default new Router({
     routes: [
         {
             path: '/',
-            redirect: '/dashboard'
+            redirect: '/dashboard'  // 判断 localStorage.getItem('ms_username')是否有值，无值跳到login
         },
         {
             path: '/',
@@ -106,12 +106,13 @@ export default new Router({
         },
         {
             path: '/login',
-            component: () => import(/* webpackChunkName: "login" */ '../components/page/Login.vue'),
+            component: () => import(/* webpackChunkName: "login" */ '../modules/login/views/Login.vue'),
             meta: { title: '登录' }
         },
         {
             path: '*',
             redirect: '/404'
         }
-    ]
+    ],
+    mode:"history"    // mode 设置为history ，去掉地址栏上的 # 号
 });

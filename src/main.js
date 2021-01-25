@@ -10,10 +10,12 @@ import './assets/css/icon.css';
 import './components/common/directives';
 import 'babel-polyfill';
 import axios from 'axios'
-//将axios注册为全局属性,使用方法为this.$axios
-Vue.prototype.$axios = axios
+import VueAxios from "vue-axios";
+//将axios注册为全局属性,使用方法为this.axios
+Vue.use(VueAxios,axios)
 //VUE中使用vue-particles粒子背景特效插件
 import VueParticles from 'vue-particles'
+import el from "element-ui/src/locale/lang/el";
 Vue.use(VueParticles)
 
 Vue.config.productionTip = false;
@@ -46,6 +48,22 @@ router.beforeEach((to, from, next) => {
             next();
         }
     }
+
+    // 若无token重定向到登录页面
+    // if(localStorage.getItem('JWT_TOKEN')){
+    //     // 如果在登录界面
+    //     if(name === 'login'){
+    //         next('/')
+    //     }else{
+    //         next();
+    //     }
+    // }else {
+    //     if(name === 'login'){
+    //         next();
+    //     }else {
+    //         next({name:'login'});
+    //     }
+    // }
 });
 
 new Vue({
@@ -53,3 +71,16 @@ new Vue({
     i18n,
     render: h => h(App)
 }).$mount('#app');
+
+// 配置全局拦截器,每次向后端请求携带头信息
+// axios.interceptors.request.use(
+//   config => {
+//       if(localStorage.JWT_TOKEN){
+//           config.headers.HTTP2_HEADER_AUTHORIZATION = 'Bearer ${localStorage.JWT_TOKEN}';
+//       }
+//       return config;
+//       // error => {
+//       //     return Promise.reject(error);
+//       // }
+//   }
+// );
