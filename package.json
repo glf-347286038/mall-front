@@ -12,6 +12,7 @@
     "babel-polyfill": "^6.26.0",
     "element-ui": "^2.11.0",
     "mavon-editor": "^2.6.17",
+    "qs": "^6.9.6",
     "vue": "^2.6.10",
     "vue-axios": "^3.2.2",
     "vue-cropperjs": "^3.0.0",

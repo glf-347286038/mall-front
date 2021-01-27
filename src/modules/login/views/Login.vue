@@ -79,7 +79,7 @@
             async login(){
                 this.axios({
                     method:'get',
-                    url:'http://localhost:8083/mall-user/login',
+                    url:'http://localhost:8083/mall-user/login/login',
                     params:{
                         userName:this.param.username,
                         password:this.param.password,
@@ -92,7 +92,8 @@
                     if(this.data.info.userId !==''){
                         localStorage.setItem('ms_username',this.param.username);
                         localStorage.setItem('ms_userId',this.data.info.userId);
-                        // localStorage.setItem('jwt',this.data.access_token);
+                        localStorage.setItem('token',this.data.access_token);
+                        localStorage.setItem('refresh_token',this.data.access_token);
                         this.$router.push('/dashboard')
                         this.$message.success('登录成功');
                     }
