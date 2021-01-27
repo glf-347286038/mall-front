@@ -103,10 +103,16 @@ export default new Router({
                     meta: { title: '支持作者' }
                 },
                 {
-                    path: '/test',
-                    component:() => import('../modules/test/views/test.vue'),
-                    meta: { title: '测试'}
+                    path: '/errorRequestTest',
+                    component:() => import('../modules/test/views/errorRequestTest.vue'),
+                    meta: { title: '请求测试'}
+                },
+                {
+                    path: '/tokenTest',
+                    component:() => import('../modules/test/views/tokenTest.vue'),
+                    meta: { title: 'token测试'}
                 }
+
             ]
         },
         {
