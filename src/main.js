@@ -49,8 +49,8 @@ router.beforeEach((to, from, next) => {
     //     }
     // }
 
-    const userId = localStorage.getItem('ms_userId');
-    if(!userId && to.path !== '/login'){
+    const token = localStorage.getItem('token');
+    if(!token && to.path !== '/login'){
         next('/login');
     }else{
         next();

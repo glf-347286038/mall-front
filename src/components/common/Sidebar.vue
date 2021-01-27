@@ -62,6 +62,31 @@ export default {
                     title: '系统首页'
                 },
                 {
+                    icon: 'el-icon-question',
+                    index: '8',
+                    title: '测试',
+                    subs: [
+                        {
+                            index: '8-2',
+                            title: '基础测试',
+                            subs: [
+                                {
+                                    index: 'errorRequestTest',
+                                    title: '请求测试'
+                                },
+                                {
+                                    index: 'tokenTest',
+                                    title: 'tokenT测试'
+                                }
+                            ]
+                        },
+                        {
+                            index: 'upload',
+                            title: '文件上传'
+                        }
+                    ]
+                },
+                {
                     icon: 'el-icon-lx-cascades',
                     index: 'table',
                     title: '基础表格'
@@ -150,11 +175,6 @@ export default {
                     index: '/donate',
                     title: '支持作者'
                 },
-                {
-                    icon: 'el-icon-lx-redpacket_fill',
-                    index: '/test',
-                    title: '测试'
-                }
             ]
         };
     },
