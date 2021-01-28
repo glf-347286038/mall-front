@@ -4,8 +4,8 @@ export const getItem = item => {
     return localStorage.getItem(item);
 }
 // 设置一条数据
-export const setItem = userId =>{
-    localStorage.setItem('userId',userId)
+export const setItem = (name,value) =>{
+    localStorage.setItem(name,value)
 }
 
 // 删除

@@ -65,6 +65,7 @@
                 // 登录返回的数据
                 data:{
                     access_token:'',
+                    refresh_token:'',
                     info:{
                         userId:'',
                         userName:'',
@@ -87,13 +88,14 @@
                 }).then(res=>{
                     const response = res.data.data;
                     this.data.access_token = response.access_token;
+                    this.data.refresh_token = response.refresh_token;
                     this.data.info = response.info;
                     console.log(this.data.access_token)
-                    if(this.data.info.userId !==''){
+                    if(this.data.access_token !==''){
                         localStorage.setItem('ms_username',this.param.username);
                         localStorage.setItem('ms_userId',this.data.info.userId);
                         localStorage.setItem('token',this.data.access_token);
-                        localStorage.setItem('refresh_token',this.data.access_token);
+                        localStorage.setItem('refresh_token',this.data.refresh_token);
                         this.$router.push('/dashboard')
                         this.$message.success('登录成功');
                     }

@@ -12,6 +12,7 @@
 
 
     import instance from "../../../utils/request";
+    import * as Message from "element-ui";
 
     export default {
         name: 'test',
@@ -47,6 +48,9 @@
             },
             handleTest3() {
                 const res = instance.get("/mall-user/test/test");
+                debugger
+                console.log(res)
+                Message.Message.info(res.toString())
             },
             handleTest4() {
                 const res = instance.get("/mall-user/test/test2");
