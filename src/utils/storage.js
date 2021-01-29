@@ -9,6 +9,6 @@ export const setItem = (name,value) =>{
 }
 
 // 删除
-export const removeItem = userId =>{
-    localStorage.removeItem(userId)
+export const removeItem = name =>{
+    localStorage.removeItem(name)
 }

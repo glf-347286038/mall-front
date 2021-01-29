@@ -55,22 +55,6 @@ router.beforeEach((to, from, next) => {
     }else{
         next();
     }
-
-    // 若无token重定向到登录页面
-    // if(localStorage.getItem('JWT_TOKEN')){
-    //     // 如果在登录界面
-    //     if(name === 'login'){
-    //         next('/')
-    //     }else{
-    //         next();
-    //     }
-    // }else {
-    //     if(name === 'login'){
-    //         next();
-    //     }else {
-    //         next({name:'login'});
-    //     }
-    // }
 });
 
 new Vue({
@@ -78,16 +62,3 @@ new Vue({
     i18n,
     render: h => h(App)
 }).$mount('#app');
-
-// 配置全局拦截器,每次向后端请求携带头信息
-// axios.interceptors.request.use(
-//   config => {
-//       if(localStorage.JWT_TOKEN){
-//           config.headers.HTTP2_HEADER_AUTHORIZATION = 'Bearer ${localStorage.JWT_TOKEN}';
-//       }
-//       return config;
-//       // error => {
-//       //     return Promise.reject(error);
-//       // }
-//   }
-// );

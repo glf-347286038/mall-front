@@ -50,7 +50,8 @@
 </template>
 
 <script>
-    import {loginCheck} from "../api/login";
+    import {setItem} from "../../../utils/storage";
+
     export default {
         data: function() {
             return {
@@ -90,12 +91,11 @@
                     this.data.access_token = response.access_token;
                     this.data.refresh_token = response.refresh_token;
                     this.data.info = response.info;
-                    console.log(this.data.access_token)
-                    if(this.data.access_token !==''){
-                        localStorage.setItem('ms_username',this.param.username);
-                        localStorage.setItem('ms_userId',this.data.info.userId);
-                        localStorage.setItem('token',this.data.access_token);
-                        localStorage.setItem('refresh_token',this.data.refresh_token);
+                    if(this.data.access_token !=='') {
+                        setItem('ms_username', this.param.username);
+                        setItem('ms_userId', this.data.info.userId);
+                        setItem('token', this.data.access_token);
+                        setItem('refresh_token', this.data.refresh_token);
                         this.$router.push('/dashboard')
                         this.$message.success('登录成功');
                     }
@@ -103,23 +103,6 @@
                     this.$message.error(error.toString());
                 })
             },
-
-
-        //     submitForm() {
-        //         let param;
-        //         loginCheck(this.)
-        //     this.$refs.login.validate(valid => {
-        //         if (valid) {
-        //             this.$message.success('登录成功');
-        //             localStorage.setItem('ms_username', this.param.username);
-        //             this.$router.push('/');
-        //         } else {
-        //             this.$message.error('请输入账号和密码');
-        //             console.log('error submit!!');
-        //             return false;
-        //         }
-        //     });
-        // },
     },
 };
 </script>
