@@ -1,9 +1,10 @@
 <template>
     <div class="handle-row">
-        <el-button type="primary" @click="handleTest1()">登录</el-button>
-        <el-button type="primary" @click="handleTest2()">403</el-button>
-        <el-button type="primary" @click="handleTest3()">401</el-button>
-        <el-button type="primary" @click="handleTest4()">404</el-button>
+        <el-button type="primary" @click="handleTestLogin()">登录</el-button>
+        <el-button type="primary" @click="handle403()">403</el-button>
+        <el-button type="primary" @click="handleNoGrant()">权限等级不够</el-button>
+        <el-button type="primary" @click="handle401()">401不携带token或token失效</el-button>
+        <el-button type="primary" @click="handleTest404()">404</el-button>
         <br>
         <br>
         <el-button type="primary" @click="getRequest()">get</el-button>
@@ -15,6 +16,9 @@
             <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
         </el-input>
         <el-button type="primary" @click="testError()">发送异常类型</el-button>
+        <br>
+        <br>
+        <el-button type="primary" @click="testNoCatch()">不捕获异常</el-button>
     </div>
 </template>
 
@@ -25,6 +29,7 @@
     import * as Message from "element-ui";
     import http from "../../../utils/request";
     import * as qs from "qs";
+    import publicUrl from "../../../config";
 
     export default {
         name: 'test',
@@ -35,7 +40,7 @@
             }
         },
         methods: {
-            handleTest1() {
+            handleTestLogin() {
                 const params = {
                     userName: '卧龙',
                     password: 'abc123',
@@ -44,12 +49,12 @@
                     params
                 }
                 try{
-                    const res = this.axios.get("http://localhost:8083/mall-user/login/login",data);
+                    const res = this.axios.get(`${publicUrl.mall_user}/oauth/login`,data);
                 }catch (e) {
                     alert(e)
                 }
             },
-            handleTest2() {
+            handle403() {
                 const params = {
                     userName: '卧龙',
                     password: 'abc123',
@@ -57,14 +62,19 @@
                 const data = {
                     params
                 }
-                const xx = instance.get('/mall-user/login/login',data)
+                const xx = http.get(`${publicUrl.mall_user}/oauth/login`,data)
             },
-            async handleTest3() {
-                const res = await http.get('/mall-user/test/test')
+            async handleNoGrant() {
+                const res = await http.get(`${publicUrl.mall_user}/test/grant`)
                 Message.Message.success(res.data)
             },
-            handleTest4() {
-                const res = instance.get("/mall-user/test/test2");
+
+            handleTest404() {
+                http.get(`${publicUrl.mall_user}/oa`);
+            },
+
+            async handle401(){
+                const res = this.axios.get(`${publicUrl.mall_user}/test/grant`)
             },
 
             async getRequest() {
@@ -72,13 +82,11 @@
                     name:'高',
                     age:'24',
                 }
-
                 try {
-                    const res = await http.get("/mall-user/test/testGet",params);
+                    const res = await http.get(`${publicUrl.mall_user}/test/testGet`,params);
                 }catch (e) {
                     Message.Message.error(e.toString())
                 }
-
             },
 
             async postRequest() {
@@ -86,7 +94,7 @@
                     name:'卧龙',
                     age:'24',
                 }
-                const res = await http.post("/mall-user/test/testPost",req);
+                const res = await http.post(`${publicUrl.mall_user}/test/testPost`,req);
             },
 
             async putRequest() {
@@ -97,15 +105,19 @@
                 const data = {
                     requestMethodDTO:params
                 }
-                const res = await http.get("/mall-user/test/testPut",params);
+                const res = await http.get(`${publicUrl.mall_user}/test/testPut`,params);
             },
 
             async testError() {
                 const params  = {
                     key:this.key
                 }
-                const res = await http.get("/mall-user/test/testError",params);
+                const res = await http.get(`${publicUrl.mall_user}/test/testError`,params);
             },
+
+            async testNoCatch(){
+                await http.get(`${publicUrl.mall_user}/test/testNoCatch`)
+            }
 
         },
 

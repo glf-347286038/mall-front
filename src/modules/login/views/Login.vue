@@ -81,7 +81,7 @@
             async login(){
                 this.axios({
                     method:'get',
-                    url:'http://localhost:8083/mall-user/login/login',
+                    url:'http://47.98.149.207:8080/mall-user/oauth/login',
                     params:{
                         userName:this.param.username,
                         password:this.param.password,

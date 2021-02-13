@@ -15,14 +15,8 @@ const instance = axios.create({
     timeout:60000,
 })
 
-// post设置请求头
-// instance.defaults.headers.post['Content-Type'] ='application/json;charset=UTF-8'
-
 // 在instance上添加请求拦截器，补充token信息
 instance.interceptors.request.use(function (request) {
-    // if(request.method==='post' || request.method==='POST'){
-    //     request.data = qs.stringify(request.data)
-    // }
     let token = getItem('token');
     // 如果有token则添加到header中
     token && (request.headers.Authorization = `Bearer ${token}`)
@@ -53,7 +47,7 @@ instance.interceptors.response.use(function (response) {
                     try{
                         const res = await axios({
                             method:'get',
-                            url:'http://localhost:8083/mall-user/login/refreshToken',
+                            url:'http://47.98.149.207:8080/mall-user/oauth/refreshToken',
                             params:{
                                 refreshToken:refresh_token
                             }
@@ -73,6 +67,7 @@ instance.interceptors.response.use(function (response) {
                         setItem('token',newToken)
                         // 再次发送请求
                         return instance(error.config)
+                        // 用刚刷新的token再次请求还401，则为权限不够
                     }catch (e) {
                         // 没有拿到新token
                         message.Message.error('登录失效,请重新登录')
@@ -93,15 +88,15 @@ instance.interceptors.response.use(function (response) {
                     })
                 }
                 break;
-            // 403:未登录
+            // 403: 服务器拒绝处理
             // 未登录则跳转登录页面，并携带当前页面的路径
             // 在登录成功后返回当前页面，这一步需要在登录页操作。
             case 403:
-                message.Message.error('未登录');
-                await router.replace({
-                    path: '/login',
-                    query: {redirect: router.currentRoute.fullPath}
-                });
+                message.Message.error('资源不可用');
+                // await router.replace({
+                //     path: '/login',
+                //     query: {redirect: router.currentRoute.fullPath}
+                // });
                 break;
             // 404：请求不存在
             case 404:
