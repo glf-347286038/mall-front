@@ -140,6 +140,8 @@ vue.js 封装 sChart.js 的图表组件。访问地址：[vue-schart](https://gi
     }
 </style>
 ```
+## swipper轮播图插件下载
+
 
 ## 其他注意事项
 
