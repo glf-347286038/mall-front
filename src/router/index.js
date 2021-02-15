@@ -7,13 +7,18 @@ export default new Router({
     routes: [
         {
             path: '/',
-            redirect: '/dashboard'  // 判断 localStorage.getItem('ms_username')是否有值，无值跳到login
+            redirect: '/index'  // 判断 localStorage.getItem('ms_username')是否有值，无值跳到login
         },
         {
             path: '/',
             component: () => import(/* webpackChunkName: "home" */ '../components/common/Home.vue'),
             meta: { title: '自述文件' },
             children: [
+                {
+                    path: '/index',
+                    component: () => import('../modules/index/views/index.vue'),
+                    meta: { title: '首页' }
+                },
                 {
                     path: '/dashboard',
                     component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Dashboard.vue'),
@@ -112,7 +117,6 @@ export default new Router({
                     component:() => import('../modules/test/views/tokenTest.vue'),
                     meta: { title: 'token测试'}
                 }
-
             ]
         },
         {

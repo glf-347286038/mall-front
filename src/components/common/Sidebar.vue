@@ -58,8 +58,8 @@ export default {
             items: [
                 {
                     icon: 'el-icon-lx-home',
-                    index: 'dashboard',
-                    title: '系统首页'
+                    index: 'index',
+                    title: '首页'
                 },
                 {
                     icon: 'el-icon-question',

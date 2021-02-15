@@ -96,7 +96,7 @@
                         setItem('ms_userId', this.data.info.userId);
                         setItem('token', this.data.access_token);
                         setItem('refresh_token', this.data.refresh_token);
-                        this.$router.push('/dashboard')
+                        this.$router.push('/index')
                         this.$message.success('登录成功');
                     }
                 }).catch((error) =>{

@@ -1,57 +1,65 @@
 <template>
-    <div>
-        <Swiper :options="spOptions">
-            <SwiperSlide>
-                <img src="../img/iphoneXSAMAX.jpg" alt srcset />
-            </SwiperSlide>
-            <SwiperSlide>
-                <img src="../img/华为Mate40PRO.jpg" alt srcset />
-            </SwiperSlide>
-            <SwiperSlide>
-                <img src="../img/华为nova8PRO.jpg" alt srcset />
-            </SwiperSlide>
-            <div class="swiper-pagination" slot="pagination"></div>
-        </Swiper>
+<!--    <div style="margin-top: 15px;">-->
+<!--        <el-input placeholder="请输入内容" v-model="input1" class="input-with-select">-->
+<!--            <el-select v-model="select" slot="prepend" placeholder="请选择">-->
+<!--                <el-option label="手机" value="1"></el-option>-->
+<!--                <el-option label="电脑" value="2"></el-option>-->
+<!--                <el-option label="书籍" value="3"></el-option>-->
+<!--            </el-select>-->
+<!--            <el-button slot="append" icon="el-icon-search"></el-button>-->
+<!--        </el-input>-->
+<!--    </div>-->
+<!--    <div class="content">-->
+
+<!--    </div>-->
+    <div id="mainContent">
+        <el-row :gutter="20">
+            <el-col :span="24"><div class="headSearch">
+                <el-input placeholder="请输入内容" v-model="input1" class="input-with-select">
+                    <el-select v-model="select" slot="prepend" placeholder="请选择">
+                        <el-option label="手机" value="1"></el-option>
+                        <el-option label="电脑" value="2"></el-option>
+                        <el-option label="书籍" value="3"></el-option>
+                    </el-select>
+                    <el-button slot="append" icon="el-icon-search"></el-button>
+                </el-input>
+            </div></el-col>
+        </el-row>
+        <el-row :gutter="20">
+            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+        </el-row>
+        <el-row :gutter="20">
+            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+        </el-row>
+        <el-row :gutter="20">
+            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+        </el-row>
     </div>
+
 </template>
 
 <script>
-    import { Swiper, SwiperSlide } from "vue-awesome-swiper";
-    import "swiper/swiper.min.css";
+    import '../css/index.css'
     export default {
-        components: {
-            Swiper,
-            SwiperSlide
-        },
         data() {
             return {
-                spOptions: {
-                    loop: true,
-                    autoplay: {
-                        delay: 1000
-                    },
-                    pagination: {
-                        el: ".swiper-pagination"
-                    }
-                }
-            };
-        }
-    };
-</script>
-
-<style lang="scss">
-    $h: 200px;
-    .swiper-container {
-        height: $h;
-        width: 100%;
-        img {
-            height: $h;
-            width: 100%;
-        }
-        .swiper-pagination {
-            .swiper-pagination-bullet-active {
-                background: #fff;
+                input1: '',
+                select: ''
             }
         }
     }
+</script>
+<style>
+
 </style>
+
+
