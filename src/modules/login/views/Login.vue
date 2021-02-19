@@ -100,7 +100,7 @@
                         this.$message.success('登录成功');
                     }
                 }).catch((error) =>{
-                    this.$message.error(error.toString());
+                    this.$message.error('用户名或密码错误');
                 })
             },
     },

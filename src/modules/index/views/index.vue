@@ -25,23 +25,33 @@
                 </el-input>
             </div></el-col>
         </el-row>
-        <el-row :gutter="20">
-            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-        </el-row>
-        <el-row :gutter="20">
-            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-        </el-row>
-        <el-row :gutter="20">
-            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-            <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+
+        <el-row>
+            <el-col :span="24"><div class="grid-content bg-purple">
+                <div id = "productList">
+                    <div v-for="v in productList ">
+                        <img v-bind:src="v.src">
+                        <span>￥</span>
+                        <span>{{v.price}}</span>
+                    </div>
+                </div>
+
+                <div class="product">
+                    <div class="productPicture">
+                        <a id="item00001">
+                            <img src="../img/iphoneXSAMAX.jpg" alt="iphoneXSMAX" class="productPic">
+                        </a>
+                    </div>
+                    <div class="productInfo">
+                        <div class="row-1">
+                            <div class="productPrice">
+                                <span>￥</span>
+                                <strong>5000</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div></el-col>
         </el-row>
     </div>
 
@@ -53,8 +63,23 @@
         data() {
             return {
                 input1: '',
-                select: ''
+                select: '',
+                productList:[
+                    {
+                        src:'../img/HongMik30.jpg',
+                        price:'22',
+                    },
+                    {
+                        src:require('../img/HongMik30.jpg'),
+                        price:'22',
+                    },
+                    {
+                        src:require('../img/Honor30.jpg'),
+                        price:'22',
+                    },
+                ],
             }
+
         }
     }
 </script>
