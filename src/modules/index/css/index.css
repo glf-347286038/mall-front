@@ -1,0 +1,67 @@
+/*搜索框样式*/
+.el-select .el-input {
+    width: 90px;
+}
+.input-with-select .el-input-group__prepend {
+    background-color: #fff;
+}
+.el-input-group {
+    width: 60%;
+    left: 20%;
+}
+.el-input--small .el-input__inner {
+    height: 40px;
+}
+
+#mainContent {
+    height: 100%;
+}
+
+/*商品列表*/
+#productList {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0px 0 0 0;
+    min-height: 85%;
+}
+/*商品外层盒子样式*/
+#productList .product {
+    width: 180px;
+    height: 320px;
+    margin-right: 20px;
+    margin-top: 20px;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
+}
+/*商品图片样式*/
+#productList .productPic {
+    height: 180px;
+    width: 180px;
+}
+/*价格和库存*/
+#productList .row1-price-stock {
+    margin-top: 11px;
+    height: 22px;
+    line-height: 22px;
+    overflow: hidden;
+    padding: 0 10px;
+}
+#productList .price {
+    color: #F40;
+    float: left;
+}
+#productList .stock {
+    float: right;
+    color: #888;
+    font-size: 13px;
+}
+/*商品名名称*/
+#productList .row2-name {
+    padding: 0 10px;
+    height: 40px;
+    color: #3d3d3d;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+
+

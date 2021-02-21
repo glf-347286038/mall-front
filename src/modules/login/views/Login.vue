@@ -50,7 +50,8 @@
 </template>
 
 <script>
-    import {loginCheck} from "../api/login";
+    import {setItem} from "../../../utils/storage";
+
     export default {
         data: function() {
             return {
@@ -65,6 +66,7 @@
                 // 登录返回的数据
                 data:{
                     access_token:'',
+                    refresh_token:'',
                     info:{
                         userId:'',
                         userName:'',
@@ -79,7 +81,7 @@
             async login(){
                 this.axios({
                     method:'get',
-                    url:'http://localhost:8083/mall-user/login',
+                    url:'http://47.98.149.207:8080/mall-user/oauth/login',
                     params:{
                         userName:this.param.username,
                         password:this.param.password,
@@ -87,36 +89,20 @@
                 }).then(res=>{
                     const response = res.data.data;
                     this.data.access_token = response.access_token;
+                    this.data.refresh_token = response.refresh_token;
                     this.data.info = response.info;
-                    console.log(this.data.access_token)
-                    if(this.data.info.userId !==''){
-                        localStorage.setItem('ms_username',this.param.username);
-                        localStorage.setItem('ms_userId',this.data.info.userId);
-                        // localStorage.setItem('jwt',this.data.access_token);
-                        this.$router.push('/dashboard')
+                    if(this.data.access_token !=='') {
+                        setItem('ms_username', this.param.username);
+                        setItem('ms_userId', this.data.info.userId);
+                        setItem('token', this.data.access_token);
+                        setItem('refresh_token', this.data.refresh_token);
+                        this.$router.push('/index')
                         this.$message.success('登录成功');
                     }
                 }).catch((error) =>{
-                    this.$message.error(error.toString());
+                    this.$message.error('用户名或密码错误');
                 })
             },
-
-
-        //     submitForm() {
-        //         let param;
-        //         loginCheck(this.)
-        //     this.$refs.login.validate(valid => {
-        //         if (valid) {
-        //             this.$message.success('登录成功');
-        //             localStorage.setItem('ms_username', this.param.username);
-        //             this.$router.push('/');
-        //         } else {
-        //             this.$message.error('请输入账号和密码');
-        //             console.log('error submit!!');
-        //             return false;
-        //         }
-        //     });
-        // },
     },
 };
 </script>

@@ -5,7 +5,7 @@
             <i v-if="!collapse" class="el-icon-s-fold"></i>
             <i v-else class="el-icon-s-unfold"></i>
         </div>
-        <div class="logo">后台管理系统</div>
+        <div class="logo">秒杀商城</div>
         <div class="header-right">
             <div class="header-user-con">
                 <!-- 全屏显示 -->
@@ -38,7 +38,7 @@
                         <i class="el-icon-caret-bottom"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <a href="https://github.com/lin-xin/vue-manage-system" target="_blank">
+                        <a href="https://github.com/glf-347286038/mall-front" target="_blank">
                             <el-dropdown-item>项目仓库</el-dropdown-item>
                         </a>
                         <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
@@ -118,7 +118,7 @@ export default {
     position: relative;
     box-sizing: border-box;
     width: 100%;
-    height: 70px;
+    height: 50px;
     font-size: 22px;
     color: #fff;
 }
@@ -126,12 +126,12 @@ export default {
     float: left;
     padding: 0 21px;
     cursor: pointer;
-    line-height: 70px;
+    line-height: 50px;
 }
 .header .logo {
     float: left;
     width: 250px;
-    line-height: 70px;
+    line-height: 50px;
 }
 .header-right {
     float: right;
@@ -139,7 +139,7 @@ export default {
 }
 .header-user-con {
     display: flex;
-    height: 70px;
+    height: 50px;
     align-items: center;
 }
 .btn-fullscreen {

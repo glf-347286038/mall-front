@@ -32,38 +32,29 @@ const i18n = new VueI18n({
 router.beforeEach((to, from, next) => {
     //标题修改
     document.title = `${to.meta.title} | 秒杀商城`;
-    const role = localStorage.getItem('ms_username');
-    if (!role && to.path !== '/login') {
-        next('/login');
-    } else if (to.meta.permission) {
-        // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已
-        role === 'admin' ? next() : next('/403');
-    } else {
-        // 简单的判断IE10及以下不进入富文本编辑器，该组件不兼容
-        if (navigator.userAgent.indexOf('MSIE') > -1 && to.path === '/editor') {
-            Vue.prototype.$alert('vue-quill-editor组件不兼容IE10及以下浏览器，请使用更高版本的浏览器查看', '浏览器不兼容通知', {
-                confirmButtonText: '确定'
-            });
-        } else {
-            next();
-        }
-    }
-
-    // 若无token重定向到登录页面
-    // if(localStorage.getItem('JWT_TOKEN')){
-    //     // 如果在登录界面
-    //     if(name === 'login'){
-    //         next('/')
-    //     }else{
+    //const role = localStorage.getItem('ms_username');
+    // if (!role && to.path !== '/login') {
+    //     next('/login');
+    // } else if (to.meta.permission) {
+    //     // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已
+    //     role === 'admin' ? next() : next('/403');
+    // } else {
+    //     // 简单的判断IE10及以下不进入富文本编辑器，该组件不兼容
+    //     if (navigator.userAgent.indexOf('MSIE') > -1 && to.path === '/editor') {
+    //         Vue.prototype.$alert('vue-quill-editor组件不兼容IE10及以下浏览器，请使用更高版本的浏览器查看', '浏览器不兼容通知', {
+    //             confirmButtonText: '确定'
+    //         });
+    //     } else {
     //         next();
-    //     }
-    // }else {
-    //     if(name === 'login'){
-    //         next();
-    //     }else {
-    //         next({name:'login'});
     //     }
     // }
+
+    const token = localStorage.getItem('token');
+    if(!token && to.path !== '/login'){
+        next('/login');
+    }else{
+        next();
+    }
 });
 
 new Vue({
@@ -71,16 +62,3 @@ new Vue({
     i18n,
     render: h => h(App)
 }).$mount('#app');
-
-// 配置全局拦截器,每次向后端请求携带头信息
-// axios.interceptors.request.use(
-//   config => {
-//       if(localStorage.JWT_TOKEN){
-//           config.headers.HTTP2_HEADER_AUTHORIZATION = 'Bearer ${localStorage.JWT_TOKEN}';
-//       }
-//       return config;
-//       // error => {
-//       //     return Promise.reject(error);
-//       // }
-//   }
-// );

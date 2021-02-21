@@ -58,8 +58,33 @@ export default {
             items: [
                 {
                     icon: 'el-icon-lx-home',
-                    index: 'dashboard',
-                    title: '系统首页'
+                    index: 'index',
+                    title: '首页'
+                },
+                {
+                    icon: 'el-icon-question',
+                    index: '8',
+                    title: '测试',
+                    subs: [
+                        {
+                            index: '8-2',
+                            title: '基础测试',
+                            subs: [
+                                {
+                                    index: 'errorRequestTest',
+                                    title: '请求测试'
+                                },
+                                {
+                                    index: 'tokenTest',
+                                    title: 'tokenT测试'
+                                }
+                            ]
+                        },
+                        {
+                            index: 'upload',
+                            title: '文件上传'
+                        }
+                    ]
                 },
                 {
                     icon: 'el-icon-lx-cascades',
@@ -149,7 +174,7 @@ export default {
                     icon: 'el-icon-lx-redpacket_fill',
                     index: '/donate',
                     title: '支持作者'
-                }
+                },
             ]
         };
     },
@@ -173,7 +198,7 @@ export default {
     display: block;
     position: absolute;
     left: 0;
-    top: 70px;
+    top: 50px;
     bottom: 0;
     overflow-y: scroll;
 }
