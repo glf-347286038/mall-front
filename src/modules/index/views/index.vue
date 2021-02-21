@@ -1,21 +1,39 @@
 <template>
     <div id="mainContent">
         <div class="headSearch">
-            <el-input class="input-with-select" placeholder="请输入内容" v-model="input1">
+            <el-input class="input-with-select" placeholder="请输入宝贝名称" v-model="requestParams.productName">
                 <el-select placeholder="请选择" slot="prepend" v-model="select">
-                    <el-option label="手机" value="1"></el-option>
-                    <el-option label="电脑" value="2"></el-option>
+                    <el-option label="数码" value="1"></el-option>
+                    <el-option label="衣服" value="2"></el-option>
                     <el-option label="书籍" value="3"></el-option>
                 </el-select>
                 <el-button @click="queryProduct()" icon="el-icon-search" slot="append"></el-button>
             </el-input>
         </div>
 
-        <div id="productList">
-            <div v-for="v in productData ">
-                <img class="productPic" v-bind:src="v.productImgPath">
-                <span>￥</span>
-                <strong>{{v.productPrice}}</strong>
+        <div id="productList" v-loading="loading" element-loading-text="拼命加载中"
+             element-loading-spinner="el-icon-loading"
+             element-loading-background="rgba(0, 0, 0, 0)">
+            <div v-for="v in productData " class="product">
+                <div class="pic=box">
+                    <img class="productPic" v-bind:src="v.productImgPath">
+                </div>
+                <div class="info=box">
+                    <div class="row1-price-stock">
+                        <div class="price">
+                            <span>￥</span>
+                            <strong>{{v.productPrice}}</strong>
+                        </div>
+                        <div class="stock">
+                            <span>库存{{v.productStock}}件</span>
+                        </div>
+                    </div>
+                    <div class="row2-name">
+                        <a class="product-name">
+                            【限时抢购】 {{v.productBrand}}/{{v.productName}}
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -44,13 +62,16 @@
                     rushEndTime: ''
                 },
                 productData: [],
+                loading:true, // 加载组件
             }
 
         },
         methods: {
             // 查询商品列表
             async queryProduct() {
+                this.loading = true;
                 this.productData = await http.post(`${publicUrl.mall_product}/mallProduct/queryProduct`, this.requestParams);
+                this.loading = false;
                 console.log(this.productData)
             }
         },
