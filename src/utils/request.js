@@ -4,11 +4,10 @@
  * 现写法：const xx = axios.create({})
  * 一个项目中可能有不同的基地址，就要用自定义写法设置不同的基地址
  */
-import message, {Message} from 'element-ui'
+import message from 'element-ui'
 import axios from 'axios'
 import router from '../router/index'
 import {getItem, removeItem, setItem} from '../utils/storage'
-import * as qs from "qs";
 
 const instance = axios.create({
    // baseURL:'/mall-user', // 后台有多个服务只好注释掉了
@@ -31,7 +30,7 @@ instance.interceptors.response.use(function (response) {
     // 后台的ResponseData类的success字段判断请求是否成功
     let result = response.data;
     if (result.success) {
-        return Promise.resolve(result)
+        return Promise.resolve(result.data)
     }else {
         message.Message.error(result.message?result.message:'操作失败:空指针异常')
         return Promise.reject(result)
@@ -101,6 +100,9 @@ instance.interceptors.response.use(function (response) {
             // 404：请求不存在
             case 404:
                 message.Message.error('网络请求不存在')
+                break;
+            case 500:
+                message.Message.error("服务器内部错误")
                 break;
             // 其他错误直接抛出错误提示
             default:
