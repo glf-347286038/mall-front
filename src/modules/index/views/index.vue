@@ -81,14 +81,14 @@
         <!--支付弹出框-->
         <div id="element-ui">
             <div id="pay-form">
-                <el-dialog :visible.sync="dialogFormVisible" title="收货地址" v-bind:title="userInfo.detailAddress">
+                <el-dialog :visible.sync="dialogFormVisible" title="收货地址" v-bind:title="payForm.detailAddress">
                     <el-form :model="payForm">
                         <div class="pay-form-name-price">
                             <span class="form-product-name">{{payForm.productName}}</span>
                             <span class="form-product-price">￥{{payForm.productPrice}}</span>
                         </div>
                         <el-form-item label="支付方式" class="pay-form-payMethod" :label-width="formLabelWidth">
-                            <el-select v-model="userInfo.accountBalance" placeholder="选择支付方式">
+                            <el-select v-model="payForm.accountBalance" placeholder="选择支付方式">
                                 <el-option label="余额" value="余额"></el-option>
                                 <el-option label="支付宝" value="支付宝"></el-option>
                                 <el-option label="微信" value="微信"></el-option>
@@ -160,12 +160,14 @@
                     productPrice: '',
                     payMethod: '',
                     password: '',
-                },
-                userInfo: {
                     detailAddress:'', // 用户地址
                     accountBalance: 0, // 账户余额
                 },
-
+                userInfo: {
+                    accountBalance: 0,
+                },
+                checkPasswordResult: true,  // 密码校验结果
+                checkBalanceResult: true, // 校验余额与商品价格的结果
             }
 
         },
@@ -210,8 +212,9 @@
                 }
                 // 此处可以将账户余额查询出来显示在前端
                 const res = await http.get(`${publicUrl.mall_user}/mallUser/getUserSelfInfo`,params);
-                this.userInfo.detailAddress = '地址:'+res.detailAddress;
-                this.userInfo.accountBalance = '余额:'+res.accountBalance;
+                this.payForm.detailAddress = '地址:'+res.detailAddress;
+                this.payForm.accountBalance = '余额:'+res.accountBalance;
+                this.userInfo.accountBalance = res.accountBalance;
                 this.payFormLoading = false;
             },
 
@@ -223,15 +226,16 @@
              * @returns {Promise<void>}
              */
             async payConfirm(productId, productPrice, password) {
-                Message.Message.success("" + productId + productPrice + password)
+                // 校验密码格式
+                this.checkPasswordResult = this.checkPassword(password)
                 // 校验余额是否超过商品价格
-                if(this.payForm < productPrice){
-                    Message.Message.warning("余额不足")
+                this.checkBalanceResult = this.checkBalance(productPrice,this.userInfo.accountBalance);
+                // 前端校验通过，调后端
+                if(this.checkPasswordResult && this.checkBalanceResult){
+                    // 调用后台接口.....非常重要！！
+                    // 支付完成后才关闭支付窗口
+                    this.dialogFormVisible = false
                 }
-                // 调用后台接口.....非常重要！！
-                // 支付完成后才关闭支付窗口
-                this.dialogFormVisible = false
-                // Message.Message.success("支付方式为:"+row.payMethod)
             },
 
             /**
@@ -241,6 +245,34 @@
             async payCancel() {
 
             },
+            /**
+             * 校验支付密码和账户余额
+             * @param password
+             */
+            checkPassword(password){
+                // 校验密码长度是否为6
+                if(password.length != 6){
+                    Message.Message.error("请输入六位数的密码")
+                    return false;
+                }
+                const numReg = /^[0-9]*$/;
+                const numRe = new RegExp(numReg);
+                if (!numRe.test(password)) {
+                    this.$message({
+                        type: 'error',
+                        message: '请输入数字 ',
+                        duration: 1000,
+                        showClose: true,
+                    })
+                    return false
+                }
+            },
+            checkBalance(productPrice,accountBalance){
+                if(parseFloat(accountBalance) < parseFloat(productPrice)){
+                    Message.Message.error("余额不足")
+                }
+            }
+
         },
 
         // beforeCreate（创建前）,
