@@ -101,6 +101,8 @@
 #pay-form .el-dialog__wrapper .el-dialog {
     width: 30%;
     min-width: 300px;
+    border: 2px solid #66768a;
+    border-radius: 20px;
 }
 
 #pay-form .el-dialog__body {
@@ -130,13 +132,21 @@
 #pay-form .el-dialog__wrapper .el-dialog .el-input__inner{
     width: 200px;
 }
-#pay-form .pay-form-payMethod .el-input__inner{
-    width: 100px!important;
+#pay-form .el-dialog__header .el-dialog__title{
+    font-size: 13px;
+}
+#pay-form .pay-form-payMethod .el-input__suffix-inner{
+    margin-right: -170px;
 }
 #pay-form .el-input--small{
     margin-left: -50px;
 }
 #pay-form .dialog-footer{
     margin-right: 30%;
+}
+#mainContent .block{
+    float: right;
+    margin: 20px 200px 0 0;
+    height: 60px;
 }
 

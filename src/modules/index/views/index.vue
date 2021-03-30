@@ -1,7 +1,7 @@
 <template>
     <div id="mainContent">
         <div class="headSearch">
-            <el-input class="input-with-select" placeholder="请输入宝贝名称" v-model="requestParams.productName">
+            <el-input class="input-with-select" placeholder="请输入宝贝名称" v-model="mallProductReqDTO.productName">
                 <el-select placeholder="请选择" slot="prepend" v-model="select">
                     <el-option label="数码" value="1"></el-option>
                     <el-option label="衣服" value="2"></el-option>
@@ -10,11 +10,14 @@
                 <el-button @click="queryProduct()" icon="el-icon-search" slot="append"></el-button>
             </el-input>
         </div>
+        <!--   专门用了显示加载控件的     -->
+        <div>
+        </div>
 
         <div id="productList" v-loading="loading" element-loading-text="拼命加载中"
              element-loading-spinner="el-icon-loading"
              element-loading-background="rgba(0, 0, 0, 0.6)">
-            <div v-for="v in productData " class="product">
+            <div v-for="v in productResDTO.records " class="product">
                 <div class="pic=box">
                     <img class="productPic" v-bind:src="v.productImgPath">
                 </div>
@@ -63,20 +66,32 @@
                 </div>
             </div>
         </div>
+        <!--   分页     -->
+        <div class="block">
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="this.mallProductReqDTO.pageNumber"
+                    :page-sizes="[10, 20, 50, 100]"
+                    :page-size="10"
+                    layout="total, sizes, prev, pager, next"
+                    :total="this.productResDTO.total">
+            </el-pagination>
+        </div>
         <!--支付弹出框-->
         <div id="element-ui">
             <div id="pay-form">
-                <el-dialog :visible.sync="dialogFormVisible" title="收货地址">
+                <el-dialog :visible.sync="dialogFormVisible" title="收货地址" v-bind:title="payForm.detailAddress">
                     <el-form :model="payForm">
                         <div class="pay-form-name-price">
                             <span class="form-product-name">{{payForm.productName}}</span>
                             <span class="form-product-price">￥{{payForm.productPrice}}</span>
                         </div>
-                        <el-form-item :label-width="formLabelWidth" class="pay-form-payMethod" label="付款方式">
-                            <el-select placeholder="余额" v-model="payForm.payMethod">
-                                <el-option label="余额" value="shanghai"></el-option>
-                                <el-option label="支付宝" value="beijing"></el-option>
-                                <el-option label="微信" value="beijing"></el-option>
+                        <el-form-item label="支付方式" class="pay-form-payMethod" :label-width="formLabelWidth">
+                            <el-select v-model="payForm.accountBalance" placeholder="选择支付方式">
+                                <el-option label="余额" value="余额"></el-option>
+                                <el-option label="支付宝" value="支付宝"></el-option>
+                                <el-option label="微信" value="微信"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item :label-width="formLabelWidth" label="输入密码">
@@ -103,12 +118,13 @@
     import http from "../../../utils/request";
     import publicUrl from "../../../config";
     import * as Message from "element-ui";
+    import {getItem} from "../../../utils/storage";
 
     export default {
         data() {
             return {
                 select: '', // 搜索时宝贝分类
-                requestParams: {
+                mallProductReqDTO: {
                     productName: '',
                     productBrand: '',
                     Type: '',
@@ -116,10 +132,18 @@
                     lowestPrice: '',
                     highestPrice: '',
                     rushStartTime: '',
-                    rushEndTime: ''
+                    rushEndTime: '',
+                    pageNumber: 1,
+                    pageSize: 10,
                 },
-                productData: [], // 搜索商品的数组
+                productResDTO: {
+                    records: [], // 搜索商品的数组
+                    total: 0, // 商品总数量
+                },
+
                 loading: true, // 搜索商品加载组件
+                payFormLoading : false, // 支付界面加载 false为否
+                confirmPayLoading: true, // 确认支付加载按钮
                 secKillLoading: false, //抢购按钮加载标识
                 payMethod: [{
                     payMethod: '余额',
@@ -136,43 +160,119 @@
                     productPrice: '',
                     payMethod: '',
                     password: '',
+                    detailAddress:'', // 用户地址
+                    accountBalance: 0, // 账户余额
                 },
+                userInfo: {
+                    accountBalance: 0,
+                },
+                checkPasswordResult: true,  // 密码校验结果
+                checkBalanceResult: true, // 校验余额与商品价格的结果
             }
 
         },
         methods: {
-            // 查询商品列表
+            handleSizeChange(val) {
+                this.mallProductReqDTO.pageSize = val;
+                this.queryProduct();
+                console.log(`每页 ${val} 条`);
+            },
+            handleCurrentChange(val) {
+                this.mallProductReqDTO.pageNumber =val;
+                this.queryProduct()
+                console.log(`当前页: ${val}`);
+            },
+            /**
+             * 查询商品列表
+             */
             async queryProduct() {
                 this.loading = true;
-                this.productData = await http.post(`${publicUrl.mall_product}/mallProduct/queryProduct`, this.requestParams);
+                this.productResDTO = await http.post(`${publicUrl.mall_product}/mallProduct/queryProduct`, this.mallProductReqDTO);
+                console.log(this.productResDTO)
                 this.loading = false;
-                console.log(this.productData)
             },
 
-            // 秒杀抢购按钮,弹出支付方式
+            /**
+             * 秒杀抢购按钮,弹出支付方式
+             * @param productId
+             * @param productName
+             * @param productPrice
+             * @returns {Promise<void>}
+             */
             async secKill(productId, productName, productPrice) {
                 // 将表单状态改为可见
                 this.dialogFormVisible = true;
+                // 弹出加载图片
+                this.payFormLoading = true;
                 this.payForm.productId = productId;
                 this.payForm.productName = productName;
                 this.payForm.productPrice = productPrice;
+                const params = {
+                    userId: getItem('ms_userId')
+                }
                 // 此处可以将账户余额查询出来显示在前端
-
+                const res = await http.get(`${publicUrl.mall_user}/mallUser/getUserSelfInfo`,params);
+                this.payForm.detailAddress = '地址:'+res.detailAddress;
+                this.payForm.accountBalance = '余额:'+res.accountBalance;
+                this.userInfo.accountBalance = res.accountBalance;
+                this.payFormLoading = false;
             },
 
-            // 取消支付和关闭支付
+            /**
+             * 点击确认支付
+             * @param productId
+             * @param productPrice
+             * @param password
+             * @returns {Promise<void>}
+             */
+            async payConfirm(productId, productPrice, password) {
+                // 校验密码格式
+                this.checkPasswordResult = this.checkPassword(password)
+                // 校验余额是否超过商品价格
+                this.checkBalanceResult = this.checkBalance(productPrice,this.userInfo.accountBalance);
+                // 前端校验通过，调后端
+                if(this.checkPasswordResult && this.checkBalanceResult){
+                    // 调用后台接口.....非常重要！！
+                    // 支付完成后才关闭支付窗口
+                    this.dialogFormVisible = false
+                }
+            },
+
+            /**
+             * 取消支付和关闭支付
+             * @returns {Promise<void>}
+             */
             async payCancel() {
 
             },
-
-            // 点击确认支付
-            async payConfirm(productId, productPrice, password) {
-                Message.Message.success("" + productId + productPrice + password)
-                // 调用后台接口.....非常重要！！
-                // 支付完成后才关闭支付窗口
-                this.dialogFormVisible = false
-                // Message.Message.success("支付方式为:"+row.payMethod)
+            /**
+             * 校验支付密码和账户余额
+             * @param password
+             */
+            checkPassword(password){
+                // 校验密码长度是否为6
+                if(password.length != 6){
+                    Message.Message.error("请输入六位数的密码")
+                    return false;
+                }
+                const numReg = /^[0-9]*$/;
+                const numRe = new RegExp(numReg);
+                if (!numRe.test(password)) {
+                    this.$message({
+                        type: 'error',
+                        message: '请输入数字 ',
+                        duration: 1000,
+                        showClose: true,
+                    })
+                    return false
+                }
+            },
+            checkBalance(productPrice,accountBalance){
+                if(parseFloat(accountBalance) < parseFloat(productPrice)){
+                    Message.Message.error("余额不足")
+                }
             }
+
         },
 
         // beforeCreate（创建前）,

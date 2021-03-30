@@ -1,8 +1,8 @@
 // 当前环境
 const environment = process.env["VUE_APP_NODE_ENV "];
-const userServiceName = '/mall-user';
+const userServiceName = '/mall-user-dev';
 const orderServiceName = '/mall-order';
-const productServiceName = '/mall-product-glf';
+const productServiceName = '/mall-product-dev';
 
 const publicUrl = {
     mall_user:process.env.VUE_APP_BASE_URL+userServiceName,
